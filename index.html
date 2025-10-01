@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <div class="head"><span>CALCULATOR</span></div>
-        <div class="display"></div>
+        <div class="display"><input type="text" value="" ></div>
         <div class="input-buttons">
             <div class="row">
             <button id="clear">AC</button>
@@ -49,6 +49,178 @@
 
 
     <script>
+        const display=document.querySelector('input');
+        const numbtn=['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'zero', 'dzero'];
+        const opbtn=['']
+        function add(a,b)
+        {
+            let result=a+b;
+            display.value=result;
+        }
+        function subtract(a,b)
+        {
+            let result=a-b;
+            display.value=result;
+        }
+        function product(a,b)
+        {
+            let result=a*b;
+            display.value=result;
+        }
+        function divide(a,b)
+        {
+            if(b==0){
+                return 'ERROR';
+            }
+            let result=a/b;
+            display.value=result;
+        }
+        function percent(a)
+        {
+            let result=a/100;
+            display.textContent=result;
+        }
+      
+            numbtn.forEach((item)=>{
+                let btn=document.querySelector('#' + item);
+                btn.addEventListener("click", ()=>{
+                    display.value+=btn.textContent;
+                    
+                });
+                
+            });
+        const clear=document.querySelector("#clear");
+        clear.addEventListener("click", ()=>{
+            display.value="";
+            current='';
+            next='';
+            operator='';
+            });
+        const bsc=document.querySelector("#backspace");
+        bsc.addEventListener("click", ()=>{
+            let arr=display.value.split('');
+            arr.pop();
+            let value=arr.join('');
+            display.value=value;
+
+        });
+        const decimal=document.querySelector("#dot");
+        dot.addEventListener('click',()=>{
+            let arr=display.value.split('');
+            if(!arr.includes('.'))
+            {
+                if(display.value=="")
+            {
+                display.value='0';
+            }
+                display.value+=decimal.textContent;
+            }        
+        });
+        let current="";
+        let next='';
+        let operator='';
+        let operation=['divide', 'multiply', 'plus'];
+        operation.forEach(item=>{
+            let btn=document.querySelector('#' + item);
+              btn.addEventListener("click", ()=>{
+                    if(display.value!="" && operator==""){
+                    current=display.value;
+                    operator=item;
+                    display.value+=" "+ btn.textContent+" ";
+                     }
+                     else if(display.value!="" && operator!="")
+                     {
+                            let arr=display.value.split(' ');
+                            if(arr[2]=="")
+                            {
+                                operator=item;
+                                display.value=current+" "+btn.textContent+" ";
+                               
+                           }
+                           else{
+                            next=arr[2];
+                            let result= operate(current, operator, next);
+                            operator=item;
+                            display.value=result+" "+btn.textContent+" ";
+                            current=result;
+                            result="";
+                            next="";
+                           }
+
+                     }
+
+                });
+        }
+        );
+        const minus=document.querySelector('#minus');
+        minus.addEventListener("click",()=>{
+            if(display.value=="")
+        {
+            display.value=minus.textContent;
+        }
+        else if(display.value!="" && operator==""){
+                    current=display.value;
+                    operator="minus";
+                    display.value+=" "+ minus.textContent+" ";
+                     }
+                     else if(display.value!="" && operator!="")
+                     {
+                            let arr=display.value.split(' ');
+                            if(arr[2]=="")
+                            {
+                                operator="minus";
+                                display.value=current+" "+minus.textContent+" ";
+                               
+                           }
+                           else{
+                            next=arr[2];
+                            let result= operate(current, operator, next);
+                            operator="minus";
+                            display.value=result+" "+minus.textContent+" ";
+                            current=result;
+                            result="";
+                            next="";
+                           }
+
+                     }
+
+        });
+        const equal=document.querySelector("#equal");
+        equal.addEventListener("click", ()=>
+        {
+            let arr=display.value.split(' ');
+            next=arr[2];
+            let result=operate(current, operator, next);
+            display.value=result;
+            next="";
+            current="";
+            operator="";
+
+        }
+    );
+        function operate(a, o, b){
+            a=Number(a);
+            b=Number(b);
+            
+       
+            switch(o)
+            {
+                case 'plus':
+                return a+b;
+                case 'minus':
+                    return a-b;
+                case 'multiply':
+                return a*b;
+                case 'divide':
+                    return a/b;
+                case 'percent':
+                    return a/100;
+            }
+        }
+        
+    
+            
+        
 
 
 
